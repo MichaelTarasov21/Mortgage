@@ -61,7 +61,7 @@ string toCurrency(float value) {
 }
 string toCurrency(double value) {
 	// Takes a float or double as input. Returns the value formatted as currency.
-	string result = "$";
+	string result = "";
 	int intval = ceil(value * 100);
 	if (intval % 100 <= 9) {
 			// If the number after the decimal point is a single digit, append a 0 before the digit.
@@ -92,13 +92,51 @@ string formatPercent(double value) {
 void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, float additional_payment) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
-	outfile << "Amount:\t\t\t" << toCurrency(loan_amount) << "\n";
+	outfile << "Amount:\t\t\t$" << toCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 	outfile << "Term(Years):\t\t" << years << "\n";
-	outfile << "Monthly Payment:\t" << toCurrency(monthly_payment) << "\n";
+	outfile << "Monthly Payment:\t$" << toCurrency(monthly_payment) << "\n";
 	outfile << "Additonal Principal:\t" << toCurrency(additional_payment) << "\n";
-	outfile << "Actual Payment:\t\t" << toCurrency(monthly_payment + additional_payment) << "\n";
+	outfile << "Actual Payment:\t\t$" << toCurrency(monthly_payment + additional_payment) << "\n";
+	outfile << "\n";
 }
+
+void writeColumns(ofstream &outfile){
+	outfile << "\n";
+	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
+}
+void writeRow(ofstream &outfile, double principle, double interest, double remaining) {
+	static int payment = 0;
+	payment++;
+
+	string row;
+	row = to_string(payment) + "\t";
+	if (payment == 1) {
+		row = row + "$";
+	}
+	row = row + "\t" + toCurrency(principle) + "\t";
+	if (payment == 1) {
+		row = row + "$";
+	}
+	row = row + "\t" + toCurrency(interest) + "\t";
+	if (payment == 1) {
+		row = row + "$";
+	}
+	row = row + "\t" + toCurrency(remaining) + "\n";
+	outfile << row;
+}
+
+
+void makePayment(ofstream &outfile, double &loan_amount, double interest_rate, double monthly_payment, float additional_payment){
+	double interest = loan_amount * interest_rate/12;
+	double principle_payment = monthly_payment + additional_payment - interest;
+	if (principle_payment > loan_amount) {
+		principle_payment = loan_amount;
+	}
+	loan_amount = loan_amount - principle_payment;
+	writeRow(outfile, principle_payment, interest, loan_amount);
+}
+
 int main()
 {
 	double loan_amount = getLoanAmount();
@@ -116,6 +154,11 @@ int main()
 	ofstream outfile(file_name);
 
 	writeIntro(outfile, loan_amount, interest_rate, years, monthly_payment, additional_payment);
+	writeColumns(outfile);
+
+	do {
+		makePayment(outfile, loan_amount, interest_rate, monthly_payment, additional_payment);
+	} while (loan_amount > 0);
 
 	outfile.close();
 	return 0;

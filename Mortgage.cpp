@@ -50,7 +50,7 @@ float getAdditionalPayment()
 string formatCurrency(float value) {
 	// Takes a float as an input. Returns the value formatted as currency.
 	string result = "";
-	int intval = ceil(value * 100);
+	int intval = round(value * 100);
 	if (intval % 100 <= 9) {
 			// If the number after the decimal point is a single digit, append a 0 before the digit.
 			result = result + to_string(intval / 100) + ".0" + to_string(intval % 100);
@@ -85,7 +85,7 @@ void writeIntro(ofstream &outfile, float loan_amount, float interest_rate, int y
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 	outfile << "Term(Years):\t\t" << years << "\n";
 	outfile << "Monthly Payment:\t$" << formatCurrency(monthly_payment) << "\n";
-	outfile << "Additonal Principal:\t" << formatCurrency(additional_payment) << "\n";
+	outfile << "Additonal Principal:\t$" << formatCurrency(additional_payment) << "\n";
 	outfile << "Actual Payment:\t\t$" << formatCurrency(monthly_payment + additional_payment) << "\n";
 	outfile << "\n";
 }
@@ -124,7 +124,7 @@ void writeRow(ofstream &outfile, float principle, float interest, float remainin
 	row = "\t" + row;
 
 	row = formatCurrency(principle) + row;
-	maxlength = maxlength + 10;
+	maxlength = maxlength + 11;
 	while (row.length() < maxlength) {
 		row = " " + row;
 	}

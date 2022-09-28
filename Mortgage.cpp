@@ -89,12 +89,15 @@ string formatPercent(double value) {
 }
 
 
-void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years) {
+void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, float additional_payment) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
 	outfile << "Amount:\t\t\t" << toCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 	outfile << "Term(Years):\t\t" << years << "\n";
+	outfile << "Monthly Payment:\t" << toCurrency(monthly_payment) << "\n";
+	outfile << "Additonal Principal:\t" << toCurrency(additional_payment) << "\n";
+	outfile << "Actual Payment:\t\t" << toCurrency(monthly_payment + additional_payment) << "\n";
 }
 int main()
 {
@@ -106,15 +109,15 @@ int main()
 	cout << "Send the mortgage amortization table to a file (enter file name): ";
 	cin >> file_name;
 	
-	double monthlyPayment = (loan_amount * interest_rate/12)/(1-1/pow(1+interest_rate/12, years*12));
+	double monthly_payment = (loan_amount * interest_rate/12)/(1-1/pow(1+interest_rate/12, years*12));
 	// Round the monthly payment up to the nearest cent
-	monthlyPayment = ceil(monthlyPayment * 100)/100;
+	monthly_payment = ceil(monthly_payment * 100)/100;
 	
 
 
 	ofstream outfile(file_name);
 
-	writeIntro(outfile, loan_amount, interest_rate, years);
+	writeIntro(outfile, loan_amount, interest_rate, years, monthly_payment, additional_payment);
 
 	outfile.close();
 	return 0;

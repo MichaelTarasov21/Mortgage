@@ -13,7 +13,7 @@ double getLoanAmount()
 	{
 		cout << "Enter the loan amount (0-9999999) ";
 		cin >> input;
-	} while (input < 0 || input > 9999999);
+	} while (input <= 0 || input > 9999999);
 	return input;
 }
 double getInterestRate()
@@ -23,7 +23,7 @@ double getInterestRate()
 	{
 		cout << "Enter the anual interest rate (0-30) ";
 		cin >> input;
-	} while (input < 0 || input > 30);
+	} while (input <= 0 || input > 30);
 	return input/100;
 }
 int getYears()

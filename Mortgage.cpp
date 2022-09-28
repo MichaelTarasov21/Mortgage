@@ -47,7 +47,7 @@ float getAdditionalPayment()
 	return input;
 }
 
-string toCurrency(float value) {
+string formatCurrency(float value) {
 	// Takes a float or double as input. Returns the value formatted as currency.
 	string result = "$";
 	int intval = ceil(value * 100);
@@ -59,7 +59,7 @@ string toCurrency(float value) {
 	}
 	return result;
 }
-string toCurrency(double value) {
+string formatCurrency(double value) {
 	// Takes a float or double as input. Returns the value formatted as currency.
 	string result = "";
 	int intval = ceil(value * 100);
@@ -92,12 +92,12 @@ string formatPercent(double value) {
 void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, float additional_payment) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
-	outfile << "Amount:\t\t\t$" << toCurrency(loan_amount) << "\n";
+	outfile << "Amount:\t\t\t$" << formatCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 	outfile << "Term(Years):\t\t" << years << "\n";
-	outfile << "Monthly Payment:\t$" << toCurrency(monthly_payment) << "\n";
-	outfile << "Additonal Principal:\t" << toCurrency(additional_payment) << "\n";
-	outfile << "Actual Payment:\t\t$" << toCurrency(monthly_payment + additional_payment) << "\n";
+	outfile << "Monthly Payment:\t$" << formatCurrency(monthly_payment) << "\n";
+	outfile << "Additonal Principal:\t" << formatCurrency(additional_payment) << "\n";
+	outfile << "Actual Payment:\t\t$" << formatCurrency(monthly_payment + additional_payment) << "\n";
 	outfile << "\n";
 }
 
@@ -114,15 +114,15 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	if (payment == 1) {
 		row = row + "$";
 	}
-	row = row + "\t" + toCurrency(principle) + "\t";
+	row = row + "\t" + formatCurrency(principle) + "\t";
 	if (payment == 1) {
 		row = row + "$";
 	}
-	row = row + "\t" + toCurrency(interest) + "\t";
+	row = row + "\t" + formatCurrency(interest) + "\t";
 	if (payment == 1) {
 		row = row + "$";
 	}
-	row = row + "\t" + toCurrency(remaining) + "\n";
+	row = row + "\t" + formatCurrency(remaining) + "\n";
 	outfile << row;
 }
 

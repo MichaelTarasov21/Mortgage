@@ -71,13 +71,29 @@ string toCurrency(double value) {
 	}
 	return result;
 }
+string formatPercent(double value) {
+	// Used to output the interest rate to the third decimal place
+	int intval = value * 100000;
+	string result;
+	result = to_string(intval / 1000);
+	result = result + ".";
+	if (intval % 1000 >= 100){
+		result = result + to_string(intval % 1000);
+	} else if (intval % 1000 >= 10) {
+		result = result + "0" + to_string(intval % 1000);
+	} else {
+		result = result + "00" + to_string(intval % 1000);
+	}
+	result = result + "%";
+	return result;
+}
 
 
-void writeIntro(ofstream &outfile, double loan_amount, float interest_rate) {
+void writeIntro(ofstream &outfile, double loan_amount, double interest_rate) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
 	outfile << "Amount:\t\t\t" << toCurrency(loan_amount) << "\n";
-	outfile << "Interest Rate:\t\t" << interest_rate * 100 << "%\n";
+	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 }
 int main()
 {

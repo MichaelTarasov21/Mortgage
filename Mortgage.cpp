@@ -113,8 +113,6 @@ int main()
 	// Round the monthly payment up to the nearest cent
 	monthly_payment = ceil(monthly_payment * 100)/100;
 	
-
-
 	ofstream outfile(file_name);
 
 	writeIntro(outfile, loan_amount, interest_rate, years, monthly_payment, additional_payment);

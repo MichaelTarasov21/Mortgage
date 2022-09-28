@@ -90,7 +90,7 @@ string formatPercent(double value) {
 
 
 void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, float additional_payment) {
-	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
+	outfile << "\t MORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
 	outfile << "Amount:\t\t\t$" << formatCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";

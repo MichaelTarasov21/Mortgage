@@ -89,11 +89,12 @@ string formatPercent(double value) {
 }
 
 
-void writeIntro(ofstream &outfile, double loan_amount, double interest_rate) {
+void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
 	outfile << "Amount:\t\t\t" << toCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
+	outfile << "Term(Years):\t\t" << years << "\n";
 }
 int main()
 {
@@ -113,7 +114,7 @@ int main()
 
 	ofstream outfile(file_name);
 
-	writeIntro(outfile, loan_amount, interest_rate);
+	writeIntro(outfile, loan_amount, interest_rate, years);
 
 	outfile.close();
 	return 0;

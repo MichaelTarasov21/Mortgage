@@ -47,14 +47,36 @@ float getAdditionalPayment()
 	return input;
 }
 
-string toCurreny(arg value) {
-	
+string toCurrency(float value) {
+	// Takes a float or double as input. Returns the value formatted as currency.
+	string result = "$";
+	int intval = ceil(value * 100);
+	if (intval % 100 <= 9) {
+			// If the number after the decimal point is a single digit, append a 0 before the digit.
+			result = result + to_string(intval / 100) + ".0" + to_string(intval % 100);
+	} else {
+		result = result + to_string(intval / 100) + "." + to_string(intval % 100);
+	}
+	return result;
 }
+string toCurrency(double value) {
+	// Takes a float or double as input. Returns the value formatted as currency.
+	string result = "$";
+	int intval = ceil(value * 100);
+	if (intval % 100 <= 9) {
+			// If the number after the decimal point is a single digit, append a 0 before the digit.
+			result = result + to_string(intval / 100) + ".0" + to_string(intval % 100);
+	} else {
+		result = result + to_string(intval / 100) + "." + to_string(intval % 100);
+	}
+	return result;
+}
+
 
 void writeIntro(ofstream &outfile, double loan_amount, float interest_rate) {
 	outfile << "\tMORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
-	outfile << "Amount:\t\t\t$" << loan_amount << "\n";
+	outfile << "Amount:\t\t\t" << toCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << interest_rate * 100 << "%\n";
 }
 int main()

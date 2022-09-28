@@ -82,9 +82,9 @@ void writeIntro(ofstream &outfile, double loan_amount, float interest_rate) {
 int main()
 {
 	double loan_amount = getLoanAmount();
-	double interest_rate = getInterestRate();
-	int years = getYears();
-	float additional_payment = getAdditionalPayment();
+	const double interest_rate = getInterestRate();
+	const int years = getYears();
+	const float additional_payment = getAdditionalPayment();
 	string file_name;
 	cout << "Send the mortgage amortization table to a file (enter file name): ";
 	cin >> file_name;

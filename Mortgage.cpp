@@ -110,19 +110,44 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	payment++;
 
 	string row;
-	row = to_string(payment) + "\t";
-	if (payment == 1) {
-		row = row + "$";
+	row = formatCurrency(remaining);
+	int maxlength = 10;
+	while (row.length() < maxlength) {
+		row = " " + row;
 	}
-	row = row + "\t" + formatCurrency(principle) + "\t";
+	row = "\t" + row;
 	if (payment == 1) {
-		row = row + "$";
+		row = "$" + row;
+		maxlength = maxlength + 1;
 	}
-	row = row + "\t" + formatCurrency(interest) + "\t";
+	row = "\t" + row;
+
+	row = formatCurrency(interest) + row;
+	maxlength = maxlength + 10;
+	while (row.length() < maxlength) {
+		row = " " + row;
+	}
+	row = "\t" + row;
 	if (payment == 1) {
-		row = row + "$";
+		row = "$" + row;
+		maxlength = maxlength + 1;
 	}
-	row = row + "\t" + formatCurrency(remaining) + "\n";
+	row = "\t" + row;
+
+	row = formatCurrency(principle) + row;
+	maxlength = maxlength + 10;
+	while (row.length() < maxlength) {
+		row = " " + row;
+	}
+	row = "\t" + row;
+	if (payment == 1) {
+		row = "$" + row;
+		maxlength = maxlength + 1;
+	}
+	row = "\t" + row;
+
+	row = to_string(payment) + row + "\n";
+
 	outfile << row;
 }
 

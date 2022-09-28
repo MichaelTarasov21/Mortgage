@@ -49,7 +49,7 @@ float getAdditionalPayment()
 
 string formatCurrency(float value) {
 	// Takes a float as an input. Returns the value formatted as currency.
-	string result = "$";
+	string result = "";
 	int intval = ceil(value * 100);
 	if (intval % 100 <= 9) {
 			// If the number after the decimal point is a single digit, append a 0 before the digit.

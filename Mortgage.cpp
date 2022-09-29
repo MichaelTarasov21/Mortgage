@@ -6,9 +6,9 @@
 #include <fstream>
 using namespace std;
 
-float getLoanAmount()
+double getLoanAmount()
 {
-	float input;
+	double input;
 	do
 	{
 		cout << "Enter the loan amount (0-9999999) ";
@@ -36,9 +36,9 @@ int getYears()
 	} while (input < 1 || input > 99);
 	return input;
 }
-float getAdditionalPayment()
+double getAdditionalPayment()
 {
-	float input;
+	double input;
 	do
 	{
 		cout << "Enter additional principle paid each month (0-9999999) ";
@@ -47,8 +47,8 @@ float getAdditionalPayment()
 	return input;
 }
 
-string formatCurrency(float value) {
-	// Takes a float as an input. Returns the value formatted as currency.
+string formatCurrency(double value) {
+	// Takes a double as an input. Returns the value formatted as currency.
 	string result = "";
 	int intval = round(value * 100);
 	if (intval % 100 <= 9) {
@@ -78,7 +78,7 @@ string formatPercent(float value) {
 }
 
 
-void writeIntro(ofstream &outfile, float loan_amount, float interest_rate, int years, float monthly_payment, float additional_payment) {
+void writeIntro(ofstream &outfile, double loan_amount, float interest_rate, int years, double monthly_payment, double additional_payment) {
 	outfile << "\t MORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
 	outfile << "Amount:\t\t\t$" << formatCurrency(loan_amount) << "\n";
@@ -94,7 +94,7 @@ void writeColumns(ofstream &outfile){
 	outfile << "\n";
 	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
 }
-void writeRow(ofstream &outfile, float principle, float interest, float remaining) {
+void writeRow(ofstream &outfile, double principle, double interest, double remaining) {
 	static int payment = 0;
 	payment++;
 
@@ -141,9 +141,9 @@ void writeRow(ofstream &outfile, float principle, float interest, float remainin
 }
 
 
-void makePayment(ofstream &outfile, float &loan_amount, float interest_rate, float monthly_payment, float additional_payment){
-	float interest = loan_amount * interest_rate/12;
-	float principle_payment = monthly_payment + additional_payment - interest;
+void makePayment(ofstream &outfile, double &loan_amount, float interest_rate, double monthly_payment, double additional_payment){
+	double interest = loan_amount * interest_rate/12;
+	double principle_payment = monthly_payment + additional_payment - interest;
 	if (principle_payment > loan_amount) {
 		principle_payment = loan_amount;
 	}
@@ -153,17 +153,17 @@ void makePayment(ofstream &outfile, float &loan_amount, float interest_rate, flo
 
 int main()
 {
-	float loan_amount = getLoanAmount();
+	double loan_amount = getLoanAmount();
 	const float interest_rate = getInterestRate();
 	const int years = getYears();
-	const float additional_payment = getAdditionalPayment();
+	const double additional_payment = getAdditionalPayment();
 	string file_name;
 	cout << "Send the mortgage amortization table to a file (enter file name): ";
 	cin >> file_name;
 	
-	float monthly_payment = (loan_amount * interest_rate/12)/(1-1/pow(1+interest_rate/12, years*12));
+	double monthly_payment = (loan_amount * interest_rate/12)/(1-1/pow(1+interest_rate/12, years*12));
 	// Round the monthly payment up to the nearest cent
-	monthly_payment = ceil(monthly_payment * 100)/100;
+	 // monthly_payment = ceil(monthly_payment * 100)/100;
 	
 	ofstream outfile(file_name);
 

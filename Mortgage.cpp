@@ -24,7 +24,7 @@ float getInterestRate()
 		cout << "Enter the anual interest rate (0-30) ";
 		cin >> input;
 	} while (input <= 0 || input > 30);
-	return input / 100;
+	return input;
 }
 int getYears()
 {
@@ -67,7 +67,7 @@ string formatCurrency(double value)
 string formatPercent(float value)
 {
 	// Used to output the interest rate to the third decimal place
-	int intval = value * 100000;
+	int intval = value * 1000;
 	string result;
 	result = to_string(intval / 1000);
 	result = result + ".";
@@ -160,7 +160,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 
 void makePayment(ofstream &outfile, double &loan_amount, float interest_rate, double monthly_payment, double additional_payment)
 {
-	double interest = loan_amount * interest_rate / 12;
+	double interest = loan_amount * interest_rate / (100 * 12);
 	double principle_payment = monthly_payment + additional_payment - interest;
 	if (principle_payment > loan_amount)
 	{
@@ -180,7 +180,7 @@ int main()
 	cout << "Send the mortgage amortization table to a file (enter file name): ";
 	cin >> file_name;
 
-	double monthly_payment = (loan_amount * interest_rate / 12) / (1 - 1 / pow(1 + interest_rate / 12, years * 12));
+	double monthly_payment = (loan_amount * interest_rate / (100 * 12)) / (1 - 1 / pow(1 + interest_rate / (100 * 12), years * 12));
 	// Round the monthly payment up to the nearest cent
 	// monthly_payment = ceil(monthly_payment * 100)/100;
 

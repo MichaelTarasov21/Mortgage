@@ -16,9 +16,9 @@ double getLoanAmount()
 	} while (input <= 0 || input > 9999999);
 	return input;
 }
-float getInterestRate()
+double getInterestRate()
 {
-	float input;
+	double input;
 	do
 	{
 		cout << "Enter the anual interest rate (0-30) ";
@@ -64,7 +64,7 @@ string formatCurrency(double value)
 	return result;
 }
 
-string formatPercent(float value)
+string formatPercent(double value)
 {
 	// Used to output the interest rate to the third decimal place
 	int intval = value * 1000;
@@ -87,7 +87,7 @@ string formatPercent(float value)
 	return result;
 }
 
-void writeIntro(ofstream &outfile, double loan_amount, float interest_rate, int years, double monthly_payment, double additional_payment)
+void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, double additional_payment)
 {
 	outfile << "\t MORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
@@ -158,7 +158,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	outfile << row;
 }
 
-void makePayment(ofstream &outfile, double &loan_amount, float interest_rate, double monthly_payment, double additional_payment)
+void makePayment(ofstream &outfile, double &loan_amount, double interest_rate, double monthly_payment, double additional_payment)
 {
 	double interest = loan_amount * interest_rate / (100 * 12);
 	double principle_payment = monthly_payment + additional_payment - interest;
@@ -173,7 +173,7 @@ void makePayment(ofstream &outfile, double &loan_amount, float interest_rate, do
 int main()
 {
 	double loan_amount = getLoanAmount();
-	const float interest_rate = getInterestRate();
+	const double interest_rate = getInterestRate();
 	const int years = getYears();
 	const double additional_payment = getAdditionalPayment();
 	string file_name;

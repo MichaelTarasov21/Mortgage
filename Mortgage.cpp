@@ -107,6 +107,7 @@ void writeColumns(ofstream &outfile)
 }
 void writeRow(ofstream &outfile, double principle, double interest, double remaining)
 {
+	static bool largeBalance = remaining >= 1000000;
 	static int payment = 0;
 	payment++;
 
@@ -138,9 +139,12 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 		maxlength = maxlength + 1;
 	}
 	row = "\t" + row;
-
 	row = formatCurrency(principle) + row;
-	maxlength = maxlength + 11;
+	maxlength = maxlength + 10;
+	if (largeBalance) {
+		// If the balance is a 7 digit number principle requires an extra space of paddiding
+		maxlength++;
+	}
 	while (row.length() < maxlength)
 	{
 		row = " " + row;

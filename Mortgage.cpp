@@ -149,7 +149,6 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	if (payment == 1)
 	{
 		row = "$" + row;
-		maxlength = maxlength + 1;
 	}
 	row = "\t" + row;
 

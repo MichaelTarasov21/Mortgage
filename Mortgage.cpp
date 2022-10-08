@@ -154,7 +154,10 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	{
 		row = "$" + row;
 	}
-	row = "\t" + row;
+	if (payment < 1000) {
+		// Payments past 1000 do not require an additional tab
+		row = "\t" + row;
+	}
 
 	row = to_string(payment) + row + "\n";
 

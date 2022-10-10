@@ -141,7 +141,8 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	row = "\t" + row;
 	row = formatCurrency(principle) + row;
 	maxlength = maxlength + 10;
-	if (largeBalance) {
+	if (largeBalance)
+	{
 		// If the balance is a 7 digit number principle requires an extra space of paddiding
 		maxlength++;
 	}
@@ -195,7 +196,7 @@ int main()
 	do
 	{
 		makePayment(outfile, loan_amount, interest_rate, monthly_payment, additional_payment);
-	} while (round(loan_amount * 100) > 0); 
+	} while (round(loan_amount * 100) > 0);
 	/* Run the above loop only if there is a principle amount that rounds to one cent
 	This helps alleviate rounding issues cause by the monthly payment being rounded down and leaving behind some principle after the final payment.
 	*/

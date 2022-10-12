@@ -6,6 +6,23 @@
 #include <fstream>
 using namespace std;
 
+const int MONTHSINYEAR = 12;
+
+const int CENTFACTOR = 100;
+const int PERCENTFACTOR = 1000;
+const int PERCENTDIVISOR = 100;
+
+const int THREEDIGIT = 100;
+const int TWODIGIT = 10;
+const int SEVENDIGIT = 1000000;
+
+
+const int TOPLOAN = 9999999;
+const int TOPINTEREST = 30;
+const int TOPYEARS = 99;
+
+const int SPACEADJUSTER = 10;
+
 double getLoanAmount()
 {
 	double input;
@@ -13,7 +30,7 @@ double getLoanAmount()
 	{
 		cout << "Enter the loan amount (0-9999999) ";
 		cin >> input;
-	} while (input <= 0 || input > 9999999);
+	} while (input <= 0 || input > TOPLOAN);
 	return input;
 }
 double getInterestRate()
@@ -23,7 +40,7 @@ double getInterestRate()
 	{
 		cout << "Enter the anual interest rate (0-30) ";
 		cin >> input;
-	} while (input <= 0 || input > 30);
+	} while (input <= 0 || input > TOPINTEREST);
 	return input;
 }
 int getYears()
@@ -33,7 +50,7 @@ int getYears()
 	{
 		cout << "Enter the loan term in years (1-99) ";
 		cin >> input;
-	} while (input < 1 || input > 99);
+	} while (input < 1 || input > TOPYEARS);
 	return input;
 }
 double getAdditionalPayment()
@@ -43,7 +60,7 @@ double getAdditionalPayment()
 	{
 		cout << "Enter additional principle paid each month (0-9999999) ";
 		cin >> input;
-	} while (input < 0 || input > 9999999);
+	} while (input < 0 || input > TOPLOAN);
 	return input;
 }
 
@@ -51,15 +68,15 @@ string formatCurrency(double value)
 {
 	// Takes a double as an input. Returns the value formatted as currency.
 	string result = "";
-	int intval = round(value * 100);
-	if (intval % 100 <= 9)
+	int intval = round(value * CENTFACTOR);
+	if (intval % CENTFACTOR < TWODIGIT)
 	{
 		// If the number after the decimal point is a single digit, append a 0 before the digit.
-		result = result + to_string(intval / 100) + ".0" + to_string(intval % 100);
+		result = result + to_string(intval / CENTFACTOR) + ".0" + to_string(intval % CENTFACTOR);
 	}
 	else
 	{
-		result = result + to_string(intval / 100) + "." + to_string(intval % 100);
+		result = result + to_string(intval / CENTFACTOR) + "." + to_string(intval % CENTFACTOR);
 	}
 	return result;
 }
@@ -67,21 +84,21 @@ string formatCurrency(double value)
 string formatPercent(double value)
 {
 	// Used to output the interest rate to the third decimal place
-	int intval = value * 1000;
+	int intval = value * PERCENTFACTOR;
 	string result;
-	result = to_string(intval / 1000);
+	result = to_string(intval / PERCENTFACTOR);
 	result = result + ".";
-	if (intval % 1000 >= 100)
+	if (intval % PERCENTFACTOR >= THREEDIGIT)
 	{
-		result = result + to_string(intval % 1000);
+		result = result + to_string(intval % PERCENTFACTOR);
 	}
-	else if (intval % 1000 >= 10)
+	else if (intval % PERCENTFACTOR >= TWODIGIT)
 	{
-		result = result + "0" + to_string(intval % 1000);
+		result = result + "0" + to_string(intval % PERCENTFACTOR);
 	}
 	else
 	{
-		result = result + "00" + to_string(intval % 1000);
+		result = result + "00" + to_string(intval % PERCENTFACTOR);
 	}
 	result = result + "%";
 	return result;
@@ -107,13 +124,13 @@ void writeColumns(ofstream &outfile)
 }
 void writeRow(ofstream &outfile, double principle, double interest, double remaining)
 {
-	static bool largeBalance = remaining >= 1000000;
+	static bool largeBalance = remaining >= SEVENDIGIT;
 	static int payment = 0;
 	payment++;
 
 	string row;
 	row = formatCurrency(remaining);
-	int maxlength = 10;
+	int maxlength = SPACEADJUSTER;
 	while (row.length() < maxlength)
 	{
 		row = " " + row;
@@ -127,7 +144,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	row = "\t" + row;
 
 	row = formatCurrency(interest) + row;
-	maxlength = maxlength + 10;
+	maxlength = maxlength + SPACEADJUSTER;
 	while (row.length() < maxlength)
 	{
 		row = " " + row;
@@ -140,7 +157,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	}
 	row = "\t" + row;
 	row = formatCurrency(principle) + row;
-	maxlength = maxlength + 10;
+	maxlength = maxlength + SPACEADJUSTER;
 	if (largeBalance)
 	{
 		// If the balance is a 7 digit number principle requires an extra space of paddiding
@@ -164,7 +181,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 
 void makePayment(ofstream &outfile, double &loan_amount, double interest_rate, double monthly_payment, double additional_payment)
 {
-	double interest = loan_amount * interest_rate / (100 * 12);
+	double interest = loan_amount * interest_rate / (PERCENTDIVISOR * MONTHSINYEAR);
 	double principle_payment = monthly_payment + additional_payment - interest;
 	if (principle_payment > loan_amount)
 	{
@@ -184,9 +201,9 @@ int main()
 	cout << "Send the mortgage amortization table to a file (enter file name): ";
 	cin >> file_name;
 
-	double monthly_payment = (loan_amount * interest_rate / (100 * 12)) / (1 - 1 / pow(1 + interest_rate / (100 * 12), years * 12));
+	double monthly_payment = (loan_amount * interest_rate / (PERCENTDIVISOR * MONTHSINYEAR)) / (1 - 1 / pow(1 + interest_rate / (PERCENTDIVISOR * MONTHSINYEAR), years * MONTHSINYEAR));
 	// Round the monthly payment up to the nearest cent
-	// monthly_payment = ceil(monthly_payment * 100)/100;
+	// monthly_payment = ceil(monthly_payment * CENTFACTOR)/CENTFACTOR;
 
 	ofstream outfile(file_name);
 
@@ -196,7 +213,7 @@ int main()
 	do
 	{
 		makePayment(outfile, loan_amount, interest_rate, monthly_payment, additional_payment);
-	} while (round(loan_amount * 100) > 0);
+	} while (round(loan_amount * CENTFACTOR) > 0);
 	/* Run the above loop only if there is a principle amount that rounds to one cent
 	This helps alleviate rounding issues cause by the monthly payment being rounded down and leaving behind some principle after the final payment.
 	*/

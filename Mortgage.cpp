@@ -16,6 +16,8 @@ const int THREEDIGIT = 100;
 const int TWODIGIT = 10;
 const int SEVENDIGIT = 1000000;
 
+const int COMMASLOTS = 3; // The amount of digits between a comma
+const int DECIMALDIVIDER = 10;
 
 const int TOPLOAN = 9999999;
 const int TOPINTEREST = 30;
@@ -64,20 +66,43 @@ double getAdditionalPayment()
 	return input;
 }
 
+void addCommaSlots(int value, string &result) {
+	// Takes a string as an argument and the number that will be formatted with commas
+	// Formats the number as a string with commas
+	do {
+		const int COMMADIVIDER = pow(DECIMALDIVIDER, COMMASLOTS);
+		int addition = value % COMMADIVIDER;
+		value = value / COMMADIVIDER;
+		result = to_string(addition) + result;
+		if (value > 0) {
+			// Add extra zeros to lower numbers before starting another loop if another loop is necessary
+			for (int i = 1; i < COMMASLOTS; i++) {
+				if (addition < pow(DECIMALDIVIDER, i)) {
+					result = '0' + result;
+				}
+			}
+			result = ',' + result; // Add a comma before beginning another round
+		}
+	} while (value > 0);
+}
+
 string formatCurrency(double value)
 {
 	// Takes a double as an input. Returns the value formatted as currency.
 	string result = "";
 	int intval = round(value * CENTFACTOR);
-	if (intval % CENTFACTOR < TWODIGIT)
+	int cents = intval % CENTFACTOR;
+	intval = intval / CENTFACTOR;
+	if (cents < TWODIGIT)
 	{
 		// If the number after the decimal point is a single digit, append a 0 before the digit.
-		result = result + to_string(intval / CENTFACTOR) + ".0" + to_string(intval % CENTFACTOR);
+		result = ".0" + to_string(cents);
 	}
 	else
 	{
-		result = result + to_string(intval / CENTFACTOR) + "." + to_string(intval % CENTFACTOR);
+		result = '.' + to_string(cents);
 	}
+	addCommaSlots(intval, result);
 	return result;
 }
 

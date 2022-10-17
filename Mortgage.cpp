@@ -23,7 +23,7 @@ const int TOPLOAN = 9999999;
 const int TOPINTEREST = 30;
 const int TOPYEARS = 99;
 
-const int SPACEADJUSTER = 10;
+const int SPACEADJUSTER = 14;
 
 double getLoanAmount()
 {
@@ -66,18 +66,23 @@ double getAdditionalPayment()
 	return input;
 }
 
-void addCommaSlots(int value, string &result) {
+void addCommaSlots(int value, string &result)
+{
 	// Takes a string as an argument and the number that will be formatted with commas
 	// Formats the number as a string with commas
-	do {
+	do
+	{
 		const int COMMADIVIDER = pow(DECIMALDIVIDER, COMMASLOTS);
 		int addition = value % COMMADIVIDER;
 		value = value / COMMADIVIDER;
 		result = to_string(addition) + result;
-		if (value > 0) {
+		if (value > 0)
+		{
 			// Add extra zeros to lower numbers before starting another loop if another loop is necessary
-			for (int i = 1; i < COMMASLOTS; i++) {
-				if (addition < pow(DECIMALDIVIDER, i)) {
+			for (int i = 1; i < COMMASLOTS; i++)
+			{
+				if (addition < pow(DECIMALDIVIDER, i))
+				{
 					result = '0' + result;
 				}
 			}
@@ -146,60 +151,74 @@ void writeColumns(ofstream &outfile)
 {
 	outfile << "\n";
 	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
+	outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n";
 }
 void writeRow(ofstream &outfile, double principle, double interest, double remaining)
 {
-	static bool largeBalance = remaining >= SEVENDIGIT;
+	// static bool largeBalance = remaining >= SEVENDIGIT;
 	static int payment = 0;
 	payment++;
 
-	string row;
-	row = formatCurrency(remaining);
-	int maxlength = SPACEADJUSTER;
+	string row = "\n";
+
+	// Remaining Balance
+	row = formatCurrency(remaining) + row;
+	int maxlength = SPACEADJUSTER - 1; // Decreased by one to match spec
 	while (row.length() < maxlength)
 	{
 		row = " " + row;
 	}
-	row = "\t" + row;
 	if (payment == 1)
 	{
 		row = "$" + row;
-		maxlength = maxlength + 1;
 	}
+	else
+	{
+		row = " " + row;
+	}
+
 	row = "\t" + row;
 
+	// Interest Paid
 	row = formatCurrency(interest) + row;
 	maxlength = maxlength + SPACEADJUSTER;
 	while (row.length() < maxlength)
 	{
 		row = " " + row;
 	}
-	row = "\t" + row;
 	if (payment == 1)
 	{
 		row = "$" + row;
-		maxlength = maxlength + 1;
 	}
-	row = "\t" + row;
-	row = formatCurrency(principle) + row;
-	maxlength = maxlength + SPACEADJUSTER;
-	if (largeBalance)
-	{
-		// If the balance is a 7 digit number principle requires an extra space of paddiding
-		maxlength++;
-	}
-	while (row.length() < maxlength)
+	else
 	{
 		row = " " + row;
 	}
 	row = "\t" + row;
+
+	// Principle Paid
+	row = formatCurrency(principle) + row;
+	maxlength = maxlength + SPACEADJUSTER;
+	/*if (largeBalance)
+	{
+		// If the balance is a 7 digit number principle requires an extra space of paddiding
+		maxlength++;
+	}*/
+	while (row.length() < maxlength)
+	{
+		row = " " + row;
+	}
 	if (payment == 1)
 	{
 		row = "$" + row;
 	}
+	else
+	{
+		row = " " + row;
+	}
 	row = "\t" + row;
 
-	row = to_string(payment) + row + "\n";
+	row = to_string(payment) + row;
 
 	outfile << row;
 }

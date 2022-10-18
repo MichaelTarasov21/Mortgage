@@ -114,23 +114,26 @@ string formatCurrency(double value)
 
 string formatPercent(double value)
 {
-	// Used to output the interest rate to the third decimal place
+	// Used to output the interest rate to the smallest possible amount of decimal places
 	int intval = value * PERCENTFACTOR;
+	int predecimal = intval / PERCENTFACTOR;
+	int postdecimal = intval % PERCENTFACTOR;
 	string result;
-	result = to_string(intval / PERCENTFACTOR);
-	result = result + ".";
-	if (intval % PERCENTFACTOR >= THREEDIGIT)
+
+	while (postdecimal % DECIMALDIVIDER == 0 && postdecimal != 0)
 	{
-		result = result + to_string(intval % PERCENTFACTOR);
+		postdecimal = postdecimal / 10;
 	}
-	else if (intval % PERCENTFACTOR >= TWODIGIT)
+
+	if (postdecimal == 0)
 	{
-		result = result + "0" + to_string(intval % PERCENTFACTOR);
+		result = to_string(predecimal);
 	}
 	else
 	{
-		result = result + "00" + to_string(intval % PERCENTFACTOR);
+		result = to_string(predecimal) + '.' + to_string(postdecimal);
 	}
+
 	result = result + "%";
 	return result;
 }

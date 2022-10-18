@@ -166,7 +166,7 @@ void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int
 
 void writeColumns(ofstream &outfile)
 {
-	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
+	outfile << "\t   Principal\t    Interest\t     Balance\n";
 	outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n";
 }
 

@@ -153,6 +153,22 @@ void writeColumns(ofstream &outfile)
 	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
 	outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n";
 }
+
+void columnAdjustment(string &row, int length, int payment) {
+	while (row.length() < length)
+	{
+		row = " " + row;
+	}
+	if (payment == 1)
+	{
+		row = "$" + row;
+	}
+	else
+	{
+		row = " " + row;
+	}
+}
+
 void writeRow(ofstream &outfile, double principle, double interest, double remaining)
 {
 	// static bool largeBalance = remaining >= SEVENDIGIT;
@@ -164,36 +180,13 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	// Remaining Balance
 	row = formatCurrency(remaining) + row;
 	int maxlength = SPACEADJUSTER - 1; // Decreased by one to match spec
-	while (row.length() < maxlength)
-	{
-		row = " " + row;
-	}
-	if (payment == 1)
-	{
-		row = "$" + row;
-	}
-	else
-	{
-		row = " " + row;
-	}
-
+	columnAdjustment(row, maxlength, payment);
 	row = "\t" + row;
 
 	// Interest Paid
 	row = formatCurrency(interest) + row;
 	maxlength = maxlength + SPACEADJUSTER;
-	while (row.length() < maxlength)
-	{
-		row = " " + row;
-	}
-	if (payment == 1)
-	{
-		row = "$" + row;
-	}
-	else
-	{
-		row = " " + row;
-	}
+	columnAdjustment(row, maxlength, payment);
 	row = "\t" + row;
 
 	// Principle Paid
@@ -204,18 +197,7 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 		// If the balance is a 7 digit number principle requires an extra space of paddiding
 		maxlength++;
 	}*/
-	while (row.length() < maxlength)
-	{
-		row = " " + row;
-	}
-	if (payment == 1)
-	{
-		row = "$" + row;
-	}
-	else
-	{
-		row = " " + row;
-	}
+	columnAdjustment(row, maxlength, payment);
 	row = "\t" + row;
 
 	row = to_string(payment) + row;

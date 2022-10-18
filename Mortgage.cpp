@@ -23,7 +23,8 @@ const int TOPLOAN = 9999999;
 const int TOPINTEREST = 30;
 const int TOPYEARS = 99;
 
-const int SPACEADJUSTER = 14;
+const int SPACEADJUSTER = 14;	   // The space to be allocated for values in columns
+const int HEADERCURRENCYSIZE = 12; // The space to be allocated for currency values in the header
 
 double getLoanAmount()
 {
@@ -134,27 +135,40 @@ string formatPercent(double value)
 	return result;
 }
 
+string headerCurrency(double value)
+{
+	// Formats the value as a currency with extra spacing for smaller values
+	string result = formatCurrency(value);
+
+	while (result.length() < HEADERCURRENCYSIZE)
+	{
+		result = ' ' + result;
+	}
+
+	return result;
+}
+
 void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int years, double monthly_payment, double additional_payment)
 {
 	outfile << "\t MORTGAGE AMORTIZATION TABLE\n";
 	outfile << "\n";
-	outfile << "Amount:\t\t\t$" << formatCurrency(loan_amount) << "\n";
+	outfile << "Amount:\t\t\t$" << headerCurrency(loan_amount) << "\n";
 	outfile << "Interest Rate:\t\t" << formatPercent(interest_rate) << "\n";
 	outfile << "Term(Years):\t\t" << years << "\n";
-	outfile << "Monthly Payment:\t$" << formatCurrency(monthly_payment) << "\n";
-	outfile << "Additonal Principal:\t$" << formatCurrency(additional_payment) << "\n";
-	outfile << "Actual Payment:\t\t$" << formatCurrency(monthly_payment + additional_payment) << "\n";
+	outfile << "Monthly Payment:\t$" << headerCurrency(monthly_payment) << "\n";
+	outfile << "Additonal Principal:\t$" << headerCurrency(additional_payment) << "\n";
+	outfile << "Actual Payment:\t\t$" << headerCurrency(monthly_payment + additional_payment) << "\n";
 	outfile << "\n";
 }
 
 void writeColumns(ofstream &outfile)
 {
-	outfile << "\n";
 	outfile << "\t\tPrincipal\t\tInterest\t\tBalance\n";
 	outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n";
 }
 
-void columnAdjustment(string &row, int length, int payment) {
+void columnAdjustment(string &row, int length, int payment)
+{
 	while (row.length() < length)
 	{
 		row = " " + row;

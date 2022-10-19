@@ -66,6 +66,13 @@ double getAdditionalPayment()
 	} while (input < 0 || input > TOPLOAN);
 	return input;
 }
+string getFileName()
+{
+	string input;
+	cout << "Send the mortgage amortization table to a file (enter file name): ";
+	cin >> input;
+	return input;
+}
 
 void addCommaSlots(int value, string &result)
 {
@@ -240,9 +247,7 @@ int main()
 	const double interest_rate = getInterestRate();
 	const int years = getYears();
 	const double additional_payment = getAdditionalPayment();
-	string file_name;
-	cout << "Send the mortgage amortization table to a file (enter file name): ";
-	cin >> file_name;
+	const string file_name = getFileName();
 
 	double monthly_payment = (loan_amount * interest_rate / (PERCENTDIVISOR * MONTHSINYEAR)) / (1 - 1 / pow(1 + interest_rate / (PERCENTDIVISOR * MONTHSINYEAR), years * MONTHSINYEAR));
 	// Round the monthly payment up to the nearest cent

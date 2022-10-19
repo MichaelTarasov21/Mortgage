@@ -258,7 +258,7 @@ int main()
 		makePayment(outfile, loan_amount, interest_rate, monthly_payment, additional_payment);
 	} while (round(loan_amount * CENTFACTOR) > 0);
 	/* Run the above loop only if there is a principle amount that rounds to one cent
-	This helps alleviate rounding issues cause by the monthly payment being rounded down and leaving behind some principle after the final payment.
+	This helps alleviate rounding issues caused by the monthly payment being rounded down and leaving behind some principle after the final payment.
 	*/
 
 	outfile.close();

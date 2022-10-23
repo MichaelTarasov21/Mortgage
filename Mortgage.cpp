@@ -174,7 +174,7 @@ void writeIntro(ofstream &outfile, double loan_amount, double interest_rate, int
 void writeColumns(ofstream &outfile)
 {
 	outfile << "\t   Principal\t    Interest\t     Balance\n";
-	outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n";
+	// outfile << "1234567890223456789032345678904234567890523456789062345678907234567890\n"; // Measuring stick
 }
 
 void columnAdjustment(string &row, int length, int payment)
@@ -195,7 +195,6 @@ void columnAdjustment(string &row, int length, int payment)
 
 void writeRow(ofstream &outfile, double principle, double interest, double remaining)
 {
-	// static bool largeBalance = remaining >= SEVENDIGIT;
 	static int payment = 0;
 	payment++;
 
@@ -216,11 +215,6 @@ void writeRow(ofstream &outfile, double principle, double interest, double remai
 	// Principle Paid
 	row = formatCurrency(principle) + row;
 	maxlength = maxlength + SPACEADJUSTER;
-	/*if (largeBalance)
-	{
-		// If the balance is a 7 digit number principle requires an extra space of paddiding
-		maxlength++;
-	}*/
 	columnAdjustment(row, maxlength, payment);
 	row = "\t" + row;
 

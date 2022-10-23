@@ -129,7 +129,7 @@ string formatPercent(double value)
 
 	while (postdecimal % DECIMALDIVIDER == 0 && postdecimal != 0)
 	{
-		postdecimal = postdecimal / 10;
+		postdecimal = postdecimal / DECIMALDIVIDER;
 	}
 
 	if (postdecimal == 0)
